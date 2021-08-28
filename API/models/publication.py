@@ -1,25 +1,29 @@
 from db import db
 import datetime
 
-
 class PublicationModel(db.Model):
-    __tablename__ = 'publics'
+    __tablename__ = 'publications'
 
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String)
     content = db.Column(db.Text)
     public_date = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     
-    def __init__(self, title, content):
+    rubric_id = db.Column(db.Integer, db.ForeignKey("rubrics.id"), nullable=False)
+    rubric = db.relationship("RubricModel")
+
+    def __init__(self, title, content, rubric_id):
         self.title = title
         self.content = content
+        self.rubric_id = rubric_id
         
     def json(self):
        return {
            "id": self.id, 
            "title": self.title, 
            "content": self.content, 
-           "public_date": self.public_date.strftime("%Y-%m-%d %H:%M:%S")
+           "public_date": self.public_date.strftime("%Y-%m-%d %H:%M:%S"),
+           "rubric_id": self.rubric_id
            }
 
     @classmethod
@@ -29,8 +33,7 @@ class PublicationModel(db.Model):
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()  
-    
-    
+       
     def delete_from_db(self):
         db.session.delete(self)
         db.session.commit()
