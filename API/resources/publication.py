@@ -1,5 +1,6 @@
 from flask_restful import Resource, reqparse
 from models.publication import PublicationModel
+from flask_jwt import jwt_required
 
 class Publication(Resource):
     parser = reqparse.RequestParser()
@@ -10,6 +11,7 @@ class Publication(Resource):
     parser.add_argument("rubric_id", type=int, required = True,
                         help = "Every item needs a rubric id")
 
+    @jwt_required()
     def get(self, id):
         publication = PublicationModel.find_by_id(id)
         
@@ -18,6 +20,7 @@ class Publication(Resource):
         
         return {"message": "Public is not found"}, 404
 
+    @jwt_required()
     def delete(self, id):
         publication = PublicationModel.find_by_id(id)
         
@@ -26,6 +29,7 @@ class Publication(Resource):
 
         return {"message": "Publication deleted"}
 
+    @jwt_required()
     def put(self, id):
         data = Publication.parser.parse_args()
         publication = PublicationModel.find_by_id(id)
@@ -41,9 +45,11 @@ class Publication(Resource):
 
 
 class PublicationList(Resource):
+    @jwt_required()
     def get(self):
         return {"publications": [publication.json() for publication in PublicationModel.query.all()]}
 
+    @jwt_required()
     def post(self):
         data = Publication.parser.parse_args()
         publication = PublicationModel(data['title'], data['content'], data['rubric_id'])

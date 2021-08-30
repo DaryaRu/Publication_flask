@@ -1,11 +1,13 @@
 from flask_restful import Resource, reqparse
 from models.rubric import RubricModel
+from flask_jwt import jwt_required
 
 class Rubric(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument("name", type=str, required=True,
                         help="This field cannot be left blank")
 
+    @jwt_required()
     def get(self, id):
         rubric = RubricModel.find_by_id(id)
         
@@ -13,7 +15,8 @@ class Rubric(Resource):
             return rubric.json()
         
         return {"message":"rubric not found"}, 404
-
+    
+    @jwt_required()
     def delete(self, id):
         rubric = RubricModel.find_by_id(id)
         
@@ -22,6 +25,7 @@ class Rubric(Resource):
 
         return {"message": "Rubric deleted"}
 
+    @jwt_required()
     def put(self, id):
         data = Rubric.parser.parse_args()
         rubric = RubricModel.find_by_id(id)
@@ -35,9 +39,11 @@ class Rubric(Resource):
         return rubric.json()
 
 class RubricList(Resource):
+    @jwt_required()
     def get(self):
         return {"rubrics": [rubric.json() for rubric in RubricModel.query.all()]}
-
+    
+    @jwt_required()
     def post(self):
         data = Rubric.parser.parse_args()
         rubric = RubricModel(data['name'])
