@@ -1,3 +1,4 @@
+from sqlalchemy.orm import relationship
 from db import db
 
 class UserModel(db.Model):
@@ -8,6 +9,8 @@ class UserModel(db.Model):
     password = db.Column(db.String)
     name = db.Column(db.String)
     surname = db.Column(db.String)
+
+    publications = relationship("PublicationModel", secondary="likes", back_populates="users")
 
     def __init__(self, username, password, name, surname):
         self.username = username

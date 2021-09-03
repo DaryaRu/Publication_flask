@@ -1,6 +1,6 @@
+from sqlalchemy.orm import relationship
 from db import db
 import datetime
-
 
 class PublicationModel(db.Model):
     __tablename__ = 'publications'
@@ -13,6 +13,8 @@ class PublicationModel(db.Model):
     rubric_id = db.Column(db.Integer, db.ForeignKey(
         "rubrics.id"), nullable=False)
     rubric = db.relationship("RubricModel", back_populates="publications")
+
+    users = relationship("UserModel", secondary="likes", back_populates="publications")
 
     def __init__(self, title, content, rubric_id):
         self.title = title
