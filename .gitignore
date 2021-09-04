@@ -27,3 +27,5 @@ htmlcov/
 
 # SQLite
 *.db
+
+env.py

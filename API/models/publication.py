@@ -27,7 +27,8 @@ class PublicationModel(db.Model):
             "title": self.title,
             "content": self.content,
             "public_date": self.public_date.strftime("%Y-%m-%d %H:%M:%S"),
-            "rubric_id": self.rubric_id
+            "rubric_id": self.rubric_id,
+            "likes_count": len(self.users)
         }
 
     @classmethod
