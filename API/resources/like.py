@@ -1,7 +1,6 @@
 from flask_jwt import jwt_required, current_identity
 from flask_restful import Resource, reqparse
 from models.like import LikeModel
-from models.user import UserModel
 from models.publication import PublicationModel
 
 
@@ -42,4 +41,4 @@ class Like(Resource):
             like.remove_like_from_db()
             return {"message": "Your like deleted"}, 200
         else:
-            return {"message": "The like doesn't exist"}, 404
+            return {"message": "The like doesn't exist"}, 404         

@@ -9,6 +9,7 @@ from env import app_secret, is_debug
 
 from resources.publication import Publication, PublicationList
 from resources.user import UserRegister
+from resources.favorite import Favorites
 from security import authenticate, identity
 
 app = Flask(__name__)
@@ -35,5 +36,6 @@ api.add_resource(Rubric, '/rubric/<id>')
 api.add_resource(RubricList, '/rubrics')
 api.add_resource(UserRegister, '/register')
 api.add_resource(Like, '/like')
+api.add_resource(Favorites, '/favorites')
 
 app.run(port=5000, debug=is_debug)
