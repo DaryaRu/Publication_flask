@@ -1,6 +1,6 @@
+from sqlalchemy.orm import relationship
 from db import db
 import datetime
-
 
 class PublicationModel(db.Model):
     __tablename__ = 'publications'
@@ -14,6 +14,8 @@ class PublicationModel(db.Model):
         "rubrics.id"), nullable=False)
     rubric = db.relationship("RubricModel", back_populates="publications")
 
+    users = relationship("UserModel", secondary="likes", back_populates="publications")
+
     def __init__(self, title, content, rubric_id):
         self.title = title
         self.content = content
@@ -25,7 +27,8 @@ class PublicationModel(db.Model):
             "title": self.title,
             "content": self.content,
             "public_date": self.public_date.strftime("%Y-%m-%d %H:%M:%S"),
-            "rubric_id": self.rubric_id
+            "rubric_id": self.rubric_id,
+            "likes_count": len(self.users)
         }
 
     @classmethod
