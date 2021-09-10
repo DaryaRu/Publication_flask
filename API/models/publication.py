@@ -1,6 +1,8 @@
 from sqlalchemy.orm import relationship
+from sqlalchemy import and_
 from db import db
 import datetime
+
 
 class PublicationModel(db.Model):
     __tablename__ = 'publications'
@@ -14,7 +16,8 @@ class PublicationModel(db.Model):
         "rubrics.id"), nullable=False)
     rubric = db.relationship("RubricModel", back_populates="publications")
 
-    users = relationship("UserModel", secondary="likes", back_populates="publications")
+    users = relationship("UserModel", secondary="likes",
+                         back_populates="publications")
 
     def __init__(self, title, content, rubric_id):
         self.title = title
@@ -34,6 +37,29 @@ class PublicationModel(db.Model):
     @classmethod
     def find_by_id(cls, id):
         return cls.query.filter_by(id=id).first()
+
+    @classmethod
+    def find_paged(cls, query):
+        page = query["page"]
+        page_size = query["page_size"]
+        title = query["title"]
+        rubric_id = query["rubric_id"]
+        content = query["content"]
+
+        filters_list = []
+
+        if(title):
+            filters_list.append(PublicationModel.title.contains(title))
+
+        if(content):
+            filters_list.append(PublicationModel.content.contains(content))    
+
+        if(rubric_id):
+            filters_list.append(PublicationModel.rubric_id.like(rubric_id))
+
+        return cls.query.filter(
+            and_(*filters_list)
+        ).paginate(page, page_size, False)
 
     def save_to_db(self):
         db.session.add(self)

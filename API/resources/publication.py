@@ -44,8 +44,8 @@ class PublicationList(Resource):
     @jwt_required()
     def get(self):
         data = publication_list_parser.parse_args()
-        result = PublicationModel.query.paginate(
-            data['page'], data['page_size'], False)
+        result = PublicationModel.find_paged(data)
+        
         return {"pages": result.pages,
                 "has_next": result.has_next,
                 "publications": [publication.json() for publication in result.items]}

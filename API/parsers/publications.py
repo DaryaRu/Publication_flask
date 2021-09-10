@@ -10,4 +10,8 @@ publication_create_parser.add_argument("rubric_id", type=int, required=True,
 
 publication_list_parser = reqparse.RequestParser()
 publication_list_parser.add_argument("page", type=int)
-publication_list_parser.add_argument("page_size", type=int)                        
+publication_list_parser.add_argument("page_size", type=int) 
+publication_list_parser.add_argument("rubric_id", type=int)   
+publication_list_parser.add_argument("title", type=str)
+publication_list_parser.add_argument("content", type=str)   
+
