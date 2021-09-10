@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 from resources.healthcheck import Healthcheck
-from db import db
+from models.db import db
 from resources.rubric import Rubric, RubricList
 from resources.like import Like
 from flask_jwt import JWT

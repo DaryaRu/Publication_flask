@@ -1,4 +1,4 @@
-from db import db
+from models.db import db
 
 
 class LikeModel(db.Model):

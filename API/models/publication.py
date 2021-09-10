@@ -1,6 +1,6 @@
 from sqlalchemy.orm import relationship
 from sqlalchemy import and_
-from db import db
+from models.db import db
 import datetime
 
 
