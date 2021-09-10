@@ -1,12 +1,10 @@
 from flask_restful import Resource, reqparse
 from models.rubric import RubricModel
 from flask_jwt import jwt_required
+from parsers.rubric import rubric_create_parser
 
 class Rubric(Resource):
-    parser = reqparse.RequestParser()
-    parser.add_argument("name", type=str, required=True,
-                        help="This field cannot be left blank")
-
+    
     @jwt_required()
     def get(self, id):
         rubric = RubricModel.find_by_id(id)
@@ -27,7 +25,7 @@ class Rubric(Resource):
 
     @jwt_required()
     def put(self, id):
-        data = Rubric.parser.parse_args()
+        data = rubric_create_parser.parse_args()
         rubric = RubricModel.find_by_id(id)
 
         if rubric is None:
@@ -45,7 +43,7 @@ class RubricList(Resource):
     
     @jwt_required()
     def post(self):
-        data = Rubric.parser.parse_args()
+        data = rubric_create_parser.parse_args()
         rubric = RubricModel(data['name'])
         
         try:

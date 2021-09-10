@@ -1,16 +1,15 @@
 from flask_jwt import jwt_required, current_identity
-from flask_restful import Resource, reqparse
+from flask_restful import Resource
 from models.like import LikeModel
 from models.publication import PublicationModel
+from parsers.like import like_create_parser
 
 
 class Like(Resource):
-    parser = reqparse.RequestParser()
-    parser.add_argument("publication_id", type=int, required=True)
-
+    
     @jwt_required()
     def post(self):
-        data = Like.parser.parse_args()
+        data = like_create_parser.parse_args()
         user_id = current_identity.id
         publication_id = data['publication_id']
 
@@ -28,7 +27,7 @@ class Like(Resource):
 
     @jwt_required()
     def delete(self):
-        data = Like.parser.parse_args()
+        data = like_create_parser.parse_args()
         user_id = current_identity.id
         publication_id = data['publication_id']
 
