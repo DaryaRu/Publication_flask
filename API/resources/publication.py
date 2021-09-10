@@ -1,17 +1,11 @@
 from flask_restful import Resource, reqparse
 from models.publication import PublicationModel
 from flask_jwt import jwt_required
+from parsers.publications import publication_create_parser, publication_list_parser
 
 
 class Publication(Resource):
-    parser = reqparse.RequestParser()
-    parser.add_argument("title", type=str, required=True,
-                        help="This field cannot be left blank")
-    parser.add_argument("content", type=str, required=True,
-                        help="This field cannot be left blank")
-    parser.add_argument("rubric_id", type=int, required=True,
-                        help="Every item needs a rubric id")
-
+    
     @jwt_required()
     def get(self, id):
         publication = PublicationModel.find_by_id(id)
@@ -32,7 +26,7 @@ class Publication(Resource):
 
     @jwt_required()
     def put(self, id):
-        data = Publication.parser.parse_args()
+        data = publication_create_parser.parse_args()
         publication = PublicationModel.find_by_id(id)
 
         if publication is None:
@@ -46,13 +40,10 @@ class Publication(Resource):
 
 
 class PublicationList(Resource):
-    parser = reqparse.RequestParser()
-    parser.add_argument("page", type=int)
-    parser.add_argument("page_size", type=int)
-
+    
     @jwt_required()
     def get(self):
-        data = PublicationList.parser.parse_args()
+        data = publication_list_parser.parse_args()
         result = PublicationModel.query.paginate(
             data['page'], data['page_size'], False)
         return {"pages": result.pages,
@@ -61,7 +52,7 @@ class PublicationList(Resource):
 
     @jwt_required()
     def post(self):
-        data = Publication.parser.parse_args()
+        data = publication_create_parser.parse_args()
         publication = PublicationModel(
             data['title'], data['content'], data['rubric_id'])
 
