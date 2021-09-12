@@ -50,10 +50,12 @@ root
 | - API - Flask application
     |
     | - models - ORM classes
+    |   |
+    |   | db.py - ORM config
+    |
     | - resoureces - application endpoinds
     |
     | app.py - application startup
     | env.py - application config
-    | db.py - ORM config
     | securite.py - JWT auth config
 ```
